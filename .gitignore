@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+*.log
+*.pt
+*.pth
+.venv/
+venv/
