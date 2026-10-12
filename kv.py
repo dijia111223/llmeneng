@@ -89,10 +89,9 @@ def run(n_head, n_kv_head):
         outs.append(attention_with_cache(q[:, :, t:t+1], k[:, :, t:t+1],
                                          v[:, :, t:t+1], cache, 0))
     out_cache = torch.cat(outs, dim=2)
-
-    # ← 空4：打印 shape / pos / nbytes / maxdiff / PASS-FAIL
-    print("out_ref.shape=%s, out_cache.shape=%s, pos=%d, nbytes=%d, maxdiff=%.6f, PASS=%s" % (out_ref.shape, out_cache.shape, cache.pos, cache.nbytes(), (out_ref - out_cache).abs().max().item(), "PASS" if torch.allclose(out_ref, out_cache, atol=1e-5) else "FAIL"))
+    print("out_ref.shape=%s, out_cache.shape=%s, pos=%d, nbytes=%d, maxdiff=%.2e, PASS=%s" % (out_ref.shape, out_cache.shape, cache.pos, cache.nbytes(), (out_ref - out_cache).abs().max().item(), "PASS" if torch.allclose(out_ref, out_cache, atol=1e-5) else "FAIL"))
     return cache.nbytes()
-
-n44=run(4, 4)
-n42 = run(4, 2)
+if __name__ == "__main__":
+    n44=run(4, 4)
+    n42 = run(4, 2)
+    print(f" nbyte减半:{n42}/{n44}={n42/n44:.2f}")
